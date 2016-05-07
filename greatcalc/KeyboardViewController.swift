@@ -18,11 +18,10 @@ class KeyboardViewController: UIViewController {
     var buttons = [Int:UIButton]()
     var parentCalculator: CalcViewController?
     
-    
     // sizes
     let bounds = UIScreen.mainScreen().bounds
-    let margin: CGFloat = 10.0
-    let buttonSize: CGFloat = ((UIScreen.mainScreen().bounds.width - (10.0 * 5)) / 4)
+    let margin: CGFloat = 1.0
+    let buttonSize: CGFloat = ((UIScreen.mainScreen().bounds.width - (1.0 * 5)) / 4)
 //    let wideButtonSize: CGFloat = (buttonSize * 2) + margin
     
     override func loadView() {
@@ -206,6 +205,11 @@ class KeyboardViewController: UIViewController {
         rootView.addSubview(button)
         buttons[18] = button
         
+        
+        for (place, button) in buttons {
+            button.backgroundColor = .blackColor()
+        }
+        
         view = rootView
     }
     
@@ -222,6 +226,15 @@ class KeyboardViewController: UIViewController {
     // zero keyed placement. the first row is in row zero.
     func yforrow(row: CGFloat) -> CGFloat {
         return CGFloat(((buttonSize+margin) * row) + margin)
+    }
+    
+    func rectForPlace(place: CGFloat, row: CGFloat) -> CGRect {
+        if place == 0 {
+            
+        
+        }
+        
+        return CGRectZero
     }
     
     func valueTapped(sender: UIButton, forEvent event: UIEvent) {
