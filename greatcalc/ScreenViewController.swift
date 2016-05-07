@@ -16,11 +16,10 @@ class ScreenViewController: UIViewController {
     let bounds = UIScreen.mainScreen().bounds
     let margin: CGFloat = 10.0
     let buttonSize: CGFloat = ((UIScreen.mainScreen().bounds.width) / 4)
-    //    let wideButtonSize: CGFloat = (buttonSize * 2) + margin
     
     override func loadView() {
-        
         let rootView = UIView()
+        
         // makes it the size of the top thingy.
         rootView.frame = CGRectMake(0, 0, bounds.width, (bounds.height - (buttonSize*5))  )
         

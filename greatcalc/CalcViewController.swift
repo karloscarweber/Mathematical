@@ -36,6 +36,7 @@ class CalcViewController: UIViewController {
     var poerandPositivity: Positivity = .Positive
     var storedoperand: Int = 0 // the left hand side of the operator
     var activeOperator = CalcOperator.Equality // Equality is the default because it does nothing unless tapped.
+    var currentValueMode: ValueMode = .Append
     
     var panner: DiscretePanGestureRecognizer?
     
@@ -57,7 +58,6 @@ class CalcViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 48.0, green: 55.0, blue: 60.0, alpha: 1.0) // #30373C
 
-        
         // gesture stuff
         panner = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
         self.view.addGestureRecognizer(panner!)
@@ -86,7 +86,15 @@ class CalcViewController: UIViewController {
     }
     
     func sendInput(input: Int) {
-        addDigit(input)
+        
+        if currentValueMode == ValueMode.Append {
+            // if we haven't just pressed the equals sign then add a digit
+            addDigit(input)
+        } else {
+            // else replace the current number with the numbers you type in.
+            replaceDigits(input)
+        }
+        
     }
     
     func sendOperation(operation: CalcOperator) {
@@ -121,15 +129,19 @@ class CalcViewController: UIViewController {
     func addDigit(digit: Int) {
         
         if formulaField.text?.characters.count != 9 {
-            if operand == 0 {
-                formulaField.text = "\(digit)" // adds the digit
-            } else {
-                formulaField.text = "\(formulaField.text!)\(digit)" // adds the digit
-            }
-            
+            formulaField.text = "\(formulaField.text!)\(digit)" // adds the digit
             // we don't actually need to store the operand until we are gonna compute stuff. 
-            operand = Int((formulaField.text! as NSString).intValue) // stores the float value
+//            operand = Int((formulaField.text! as NSString).intValue) // stores the float value
         }
+    }
+    
+    func replaceDigits(digit: Int) {
+        formulaField.text = "\(digit)" // adds the digit
+        
+        // we don't actually need to store the operand until we are gonna compute stuff.
+//        operand = Int((formulaField.text! as NSString).intValue) // stores the float value
+        
+        currentValueMode = .Append
     }
     
     // this happens when we type an operator, it replaces the active

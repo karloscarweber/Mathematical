@@ -20,8 +20,8 @@ class KeyboardViewController: UIViewController {
     
     // sizes
     let bounds = UIScreen.mainScreen().bounds
-    let margin: CGFloat = 1.0
-    let buttonSize: CGFloat = ((UIScreen.mainScreen().bounds.width - (1.0 * 5)) / 4)
+    let margin: CGFloat = 0.0
+    let buttonSize: CGFloat = ((UIScreen.mainScreen().bounds.width - (0.0 * 5)) / 4)
 //    let wideButtonSize: CGFloat = (buttonSize * 2) + margin
     
     override func loadView() {
@@ -231,7 +231,6 @@ class KeyboardViewController: UIViewController {
     func rectForPlace(place: CGFloat, row: CGFloat) -> CGRect {
         if place == 0 {
             
-        
         }
         
         return CGRectZero

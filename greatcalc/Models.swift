@@ -13,14 +13,14 @@
 
 import UIKit
 
-
 struct equation {
-    var operand1 = 0,
+    var operand1: CGFloat = 0,
         operation = CalcOperator.Addition,
-        operand2 = 0,
-        result = 0
+        operand2: CGFloat = 0,
+        result: CGFloat = 0,
+        saved: Bool = false,
+        active: Bool = false
 }
-
 
 //enum CalcOperator {
 //    case Addition
