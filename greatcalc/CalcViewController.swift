@@ -26,10 +26,8 @@ class CalcViewController: UIViewController {
     var maximumTravel: CGFloat = 0 // the maximum distance the views can travel downward.
     let formulaField = UILabel()
     
-    
     // State management:
     var historyVisible = false
-    
     
     // values
     var operand: Int = 0 // the current operand that is being manipulated
@@ -55,23 +53,14 @@ class CalcViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
-        
-        gradientBackgroundThingy.removeFromSuperview()
-        gradientBackgroundThingy.frame = CGRectMake(0, 0, bounds.width, bounds.height)
-        view.addSubview(gradientBackgroundThingy)
+        setupGradientThingy()
         
         // layout keyboard view on initial load thing
-        addChildViewController(keyboard)
-        view.addSubview(keyboard.view)
-        keyboard.view.frame = CGRectMake(keyboard.view.frame.origin.x, bounds.height - keyboard.view.frame.height, keyboard.view.frame.width, keyboard.view.frame.height)
-        maximumTravel = keyboard.view.frame.height
+        layoutKeyboard()
         layoutFormulaField()
         
         // layout screen View.
         addChildViewController(aScreen)
-        //        print("bounds.width: \(bounds.width), \(bounds.height)")
-        //        aScreen.view.frame = CGRectMake(0, 0, bounds.width, bounds.height)
         view.addSubview(aScreen.view)
         
         // gesture stuff
@@ -79,6 +68,12 @@ class CalcViewController: UIViewController {
         panner2 = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
         aScreen.view.addGestureRecognizer(panner!)
         keyboard.view.addGestureRecognizer(panner2!)
+    }
+    
+    func setupGradientThingy() {
+        gradientBackgroundThingy.removeFromSuperview()
+        gradientBackgroundThingy.frame = CGRectMake(0, 0, bounds.width, bounds.height)
+        view.addSubview(gradientBackgroundThingy)
     }
     
     // add the formula field
@@ -90,6 +85,13 @@ class CalcViewController: UIViewController {
         formulaField.textAlignment = .Right
         formulaField.textColor = .blueColor()
         view.addSubview(formulaField)
+    }
+    
+    func layoutKeyboard() {
+        addChildViewController(keyboard)
+        view.addSubview(keyboard.view)
+        keyboard.view.frame = CGRectMake(keyboard.view.frame.origin.x, bounds.height - keyboard.view.frame.height, keyboard.view.frame.width, keyboard.view.frame.height)
+        maximumTravel = keyboard.view.frame.height
     }
     
     func sendInput(input: Int) {
@@ -126,8 +128,6 @@ class CalcViewController: UIViewController {
             clear()
         case .PositiveNegative:
             reversePositivity()
-        default:
-            break
         }
         
     }
@@ -246,16 +246,12 @@ class CalcViewController: UIViewController {
         and we don't want decimals at the end if there isn't an actual decimal value
      */
     
-    
 }
-
 
 enum Positivity {
     case Positive
     case Negative
 }
-
-
 
 extension CalcViewController {
 
@@ -330,7 +326,7 @@ extension CalcViewController {
         historyVisible = true
         UIView.animateWithDuration(0.2, animations: {
             self.keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y + self.keyboard.view!.frame.height)
-            self.aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y + self.keyboard.view!.frame.height)
+            self.aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y + self.maximumTravel)
         })
         
     }
@@ -340,7 +336,7 @@ extension CalcViewController {
         historyVisible = false
         UIView.animateWithDuration(0.2, animations: {
             self.keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y - self.keyboard.view!.frame.height)
-            self.aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y - self.keyboard.view!.frame.height)
+            self.aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y - self.maximumTravel)
         })
         
     }
