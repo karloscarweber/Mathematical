@@ -12,33 +12,18 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-//    let mathmatical =
+    let mathmatical = CalcViewController()
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         window = UIWindow()
-        window?.rootViewController = CalcViewController()
+        window?.rootViewController = mathmatical
+        window?.backgroundColor = UIColor.yellowColor()
         window?.makeKeyAndVisible()
         
         return true
     }
-    
-    
-//    var window: UIWindow?
-//    let navController = UINavigationController()
-//    var appCoordinator: AppCoordinator?
-//    
-//    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-//        
-//        window = UIWindow()
-//        window?.rootViewController = navController
-//        window?.makeKeyAndVisible()
-//        appCoordinator = AppCoordinator(controller: navController)
-//        appCoordinator!.start()
-//        
-//        return true
-//    }
     
 
     func applicationWillResignActive(application: UIApplication) {

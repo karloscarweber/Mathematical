@@ -24,11 +24,11 @@ class KeyboardViewController: UIViewController {
     let buttonSize: CGFloat = ((UIScreen.mainScreen().bounds.width - (0.0 * 5)) / 4)
 //    let wideButtonSize: CGFloat = (buttonSize * 2) + margin
     
-    override func loadView() {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        view.backgroundColor = .blueColor()
         
-        let rootView = UIView()
-        
-        rootView.frame = CGRectMake(0, 0, bounds.width, ((buttonSize*5) + (margin*6)))
+        view.frame = CGRectMake(0, 0, bounds.width, ((buttonSize*5) + (margin*6)))
         
         // 19 buttons
         
@@ -38,7 +38,7 @@ class KeyboardViewController: UIViewController {
         button0.setTitle("<-", forState: .Normal)
         button0.tag = 0
         button0.addTarget(self, action: #selector(actionTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button0)
+        view.addSubview(button0)
         buttons[0] = button0
         
         
@@ -48,7 +48,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("AC", forState: .Normal)
         button.tag = 1
         button.addTarget(self, action: #selector(actionTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[1] = button
         
         
@@ -58,7 +58,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("+/-", forState: .Normal)
         button.tag = 2
         button.addTarget(self, action: #selector(actionTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[2] = button
         
         // button 3 / an operator
@@ -67,7 +67,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("/", forState: .Normal)
         button.tag = 3
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[3] = button
         
         // button 4 7
@@ -76,7 +76,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("7", forState: .Normal)
         button.tag = 4
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[4] = button
         
         // button 5 8
@@ -85,7 +85,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("8", forState: .Normal)
         button.tag = 5
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[5] = button
         
         // button 6 9
@@ -94,7 +94,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("9", forState: .Normal)
         button.tag = 6
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[6] = button
         
         // button 7 X an operator
@@ -103,7 +103,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("X", forState: .Normal)
         button.tag = 7
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[7] = button
         
         // button 8 4
@@ -112,7 +112,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("4", forState: .Normal)
         button.tag = 8
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[8] = button
         
         // button 9 5
@@ -121,7 +121,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("5", forState: .Normal)
         button.tag = 9
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[9] = button
         
         // button 10 6
@@ -130,7 +130,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("6", forState: .Normal)
         button.tag = 10
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[10] = button
         
         // button 11 X an operator
@@ -139,7 +139,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("-", forState: .Normal)
         button.tag = 11
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[11] = button
         
         // button 12 1
@@ -148,7 +148,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("1", forState: .Normal)
         button.tag = 12
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[12] = button
         
         // button 13 2
@@ -157,7 +157,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("2", forState: .Normal)
         button.tag = 13
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[13] = button
         
         // button 14 3
@@ -166,7 +166,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("3", forState: .Normal)
         button.tag = 14
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[14] = button
         
         // button 15 + an operator
@@ -175,7 +175,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("+", forState: .Normal)
         button.tag = 15
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[15] = button
         
         // button 16 0
@@ -184,7 +184,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle("0", forState: .Normal)
         button.tag = 16
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[16] = button
         
         // button 17 .
@@ -193,7 +193,7 @@ class KeyboardViewController: UIViewController {
         button.setTitle(".", forState: .Normal)
         button.tag = 17
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[17] = button
         
         // button 18 = an operator
@@ -202,20 +202,13 @@ class KeyboardViewController: UIViewController {
         button.setTitle("=", forState: .Normal)
         button.tag = 18
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
-        rootView.addSubview(button)
+        view.addSubview(button)
         buttons[18] = button
         
         
         for (place, button) in buttons {
             button.backgroundColor = .blackColor()
         }
-        
-        view = rootView
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .blueColor()
     }
     
     // zero keyed placement. the first button is in place zero.

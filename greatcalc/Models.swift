@@ -29,6 +29,3 @@ struct equation {
 //    case Multiplication
 //    case Equality
 //}
-
-
-

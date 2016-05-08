@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		93297A871CDDAA5500153D62 /* DiscretePanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93297A861CDDAA5500153D62 /* DiscretePanGestureRecognizer.swift */; };
-		93297A891CDDB9CA00153D62 /* ScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93297A881CDDB9CA00153D62 /* ScreenViewController.swift */; };
+		93297A891CDDB9CA00153D62 /* FormulaScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93297A881CDDB9CA00153D62 /* FormulaScreenViewController.swift */; };
 		93297A8B1CDDBA5000153D62 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93297A8A1CDDBA5000153D62 /* StoreKit.framework */; };
+		9371EFF11CDEDF6100547CDA /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9371EFF01CDEDF6100547CDA /* UIKitExtensions.swift */; };
 		937BDF381CC8313300CED950 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937BDF371CC8313300CED950 /* AppDelegate.swift */; };
 		937BDF3F1CC8313400CED950 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 937BDF3E1CC8313400CED950 /* Assets.xcassets */; };
 		937BDF421CC8313400CED950 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 937BDF401CC8313400CED950 /* LaunchScreen.storyboard */; };
@@ -21,8 +22,9 @@
 
 /* Begin PBXFileReference section */
 		93297A861CDDAA5500153D62 /* DiscretePanGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscretePanGestureRecognizer.swift; sourceTree = "<group>"; };
-		93297A881CDDB9CA00153D62 /* ScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenViewController.swift; sourceTree = "<group>"; };
+		93297A881CDDB9CA00153D62 /* FormulaScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormulaScreenViewController.swift; sourceTree = "<group>"; };
 		93297A8A1CDDBA5000153D62 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		9371EFF01CDEDF6100547CDA /* UIKitExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
 		937BDF341CC8313300CED950 /* greatcalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = greatcalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		937BDF371CC8313300CED950 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		937BDF3E1CC8313400CED950 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -70,9 +72,10 @@
 				93A208BA1CD0A0A600420ED2 /* CalcViewController.swift */,
 				93297A861CDDAA5500153D62 /* DiscretePanGestureRecognizer.swift */,
 				93A208BC1CD1306100420ED2 /* KeyboardViewController.swift */,
-				93297A881CDDB9CA00153D62 /* ScreenViewController.swift */,
+				93297A881CDDB9CA00153D62 /* FormulaScreenViewController.swift */,
 				93FBFF451CD282CD0015EABF /* Models.swift */,
 				93FBFF431CD1BFC70015EABF /* Enumerations.swift */,
+				9371EFF01CDEDF6100547CDA /* UIKitExtensions.swift */,
 				937BDF3E1CC8313400CED950 /* Assets.xcassets */,
 				937BDF401CC8313400CED950 /* LaunchScreen.storyboard */,
 				937BDF431CC8313400CED950 /* Info.plist */,
@@ -156,12 +159,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93297A891CDDB9CA00153D62 /* ScreenViewController.swift in Sources */,
+				93297A891CDDB9CA00153D62 /* FormulaScreenViewController.swift in Sources */,
 				93A208BB1CD0A0A600420ED2 /* CalcViewController.swift in Sources */,
 				93A208BD1CD1306100420ED2 /* KeyboardViewController.swift in Sources */,
 				93297A871CDDAA5500153D62 /* DiscretePanGestureRecognizer.swift in Sources */,
 				937BDF381CC8313300CED950 /* AppDelegate.swift in Sources */,
 				93FBFF441CD1BFC70015EABF /* Enumerations.swift in Sources */,
+				9371EFF11CDEDF6100547CDA /* UIKitExtensions.swift in Sources */,
 				93FBFF461CD282CD0015EABF /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
