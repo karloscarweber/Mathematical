@@ -17,7 +17,6 @@ class FormulaScreenViewController: UIViewController {
     let margin: CGFloat = 20.0
     let buttonSize: CGFloat = ((UIScreen.mainScreen().bounds.width) / 4)
     let line = UIView()
-//    let gradientBackgroundThingy = GradientView(colorOne: UIColor.mathLightBlack(), colorTwo: UIColor.mathDarkBlack())
     
     // views
     let formulaField = UILabel() // where the formula goes.
@@ -25,13 +24,12 @@ class FormulaScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view.clipsToBounds = true
         
         // makes it the size of the space between the keyboard and the top of the screen.
         view.frame = CGRectMake(0, 0, bounds.width, (bounds.height - (buttonSize*5)) )
-        view.backgroundColor = .blueColor()
-//        setupGradientBackground()
+        view.backgroundColor = .clearColor()
+        setupDigitField()
     }
     
     func setupDigitField() {
@@ -39,6 +37,7 @@ class FormulaScreenViewController: UIViewController {
         digitField.removeFromSuperview()
         digitField.frame = CGRectMake(20.0, digitYOffset, bounds.width - (margin*2), 64.0)
         digitField.font = UIFont.systemFontOfSize(64)
+        digitField.text = "163"
         digitField.textColor = .whiteColor()
         digitField.textAlignment = .Right
         self.view.addSubview(digitField)
@@ -49,8 +48,9 @@ class FormulaScreenViewController: UIViewController {
         let formulaYOffset = (digitField.frame.origin.y - 2 - 24)
         formulaField.removeFromSuperview()
         formulaField.frame = CGRectMake(20.0, formulaYOffset, bounds.width - (margin*2), 24.0)
-        formulaField.font = UIFont.systemFontOfSize(64)
+        formulaField.font = UIFont.systemFontOfSize(24)
         formulaField.textColor = .whiteColor()
+        formulaField.text = "134 + 29"
         formulaField.textAlignment = .Right
         formulaField.layer.opacity = 0.3
         self.view.addSubview(formulaField)
@@ -63,15 +63,15 @@ class FormulaScreenViewController: UIViewController {
         line.backgroundColor = UIColor.whiteColor()
         line.layer.opacity = 0.2
         self.view.addSubview(line)
-//        setupGradientBackground()
     }
     
-//    func setupGradientBackground() {
-//        gradientBackgroundThingy.removeFromSuperview()
-//        gradientBackgroundThingy.frame = CGRectMake(0, 0, bounds.width, bounds.height)
-//        
-//        self.view.addSubview(gradientBackgroundThingy)
-//    
-//    }
+    // adds a digit to the digitField
+    func addDigit() {
+    
+    }
+    
+    func pushFormula() {
+    
+    }
     
 }

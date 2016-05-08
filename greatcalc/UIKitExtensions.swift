@@ -20,6 +20,26 @@ extension UIColor {
     class func mathDarkBlack() -> UIColor {
         return UIColor(red: 48/255, green: 55/255, blue: 60/255, alpha: 1.0)
     }
+    
+    // #979797
+    class func mathLightGray() -> UIColor {
+        return UIColor(red: 151/255, green: 151/255, blue: 151/255, alpha: 1.0)
+    }
+    
+    // #818181
+    class func mathGray() -> UIColor {
+        return UIColor(red: 129/255, green: 129/255, blue: 129/255, alpha: 1.0)
+    }
+    
+    // #FFC600
+    class func mathLightYellow() -> UIColor {
+        return UIColor(red: 255/255, green: 198/255, blue: 0/255, alpha: 1.0)
+    }
+    
+    // #FFAE00
+    class func mathDarkYellow() -> UIColor {
+        return UIColor(red: 255/255, green: 174/255, blue: 0/255, alpha: 1.0)
+    }
 
 }
 
@@ -47,9 +67,77 @@ class GradientView: UIView {
 
 }
 
-
+// Math buttons have certain styles that are just fantastic.
 class MathButton: UIButton {
 
+    var topLine = false
+    var rightLine = false
+    var bottomLine = false
+    var leftLine = false
+    
+    var topLineView = UIView()
+    var rightLineView = UIView()
+    var bottomLineView = UIView()
+    var leftLineView = UIView()
+    
+    var linescolor = UIColor.clearColor()
+    
+    override init(frame: CGRect) {
+        super.init(frame:frame)
+        setupButton()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupButton()
+    }
+    
+    func setupButton() {
+        setupLines()
+    }
+    
+    override func layoutSubviews() {
+        setupLines()
+        super.layoutSubviews()
+    }
+    
+    func setupLines() {
+    
+        if topLine == true {
+            topLineView.frame = CGRectMake(0, 0, self.frame.width, 1.0)
+            topLineView.backgroundColor = linescolor
+            addSubview(topLineView)
+//            sendSubviewToBack(topLineView)
+        } else {
+            topLineView.removeFromSuperview()
+        }
+        
+        if rightLine == true {
+            rightLineView.frame = CGRectMake(self.frame.width - 1.0, 0, 1.0, self.frame.height)
+            rightLineView.backgroundColor = linescolor
+            addSubview(rightLineView)
+        } else {
+            rightLineView.removeFromSuperview()
+        }
+        
+        if bottomLine == true {
+            bottomLineView.frame = CGRectMake(0, self.frame.height - 1.0, self.frame.width, 1.0)
+            bottomLineView.backgroundColor = linescolor
+            addSubview(bottomLineView)
+        } else {
+            bottomLineView.removeFromSuperview()
+        }
+        
+        if leftLine == true {
+            leftLineView.frame = CGRectMake(0, 0, 1.0, self.frame.height)
+            leftLineView.backgroundColor = linescolor
+            addSubview(leftLineView)
+        } else {
+            leftLineView.removeFromSuperview()
+        }
+    
+    }
+    
 
 }
 

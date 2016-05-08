@@ -39,6 +39,7 @@ class CalcViewController: UIViewController {
     var currentValueMode: ValueMode = .Append
     
     var panner: DiscretePanGestureRecognizer?
+    var panner2: DiscretePanGestureRecognizer?
     let gradientBackgroundThingy = GradientView(colorOne: UIColor.mathLightBlack(), colorTwo: UIColor.mathDarkBlack())
 
     
@@ -54,9 +55,7 @@ class CalcViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // gesture stuff
-        panner = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
-        self.view.addGestureRecognizer(panner!)
+
         
         gradientBackgroundThingy.removeFromSuperview()
         gradientBackgroundThingy.frame = CGRectMake(0, 0, bounds.width, bounds.height)
@@ -74,6 +73,12 @@ class CalcViewController: UIViewController {
         //        print("bounds.width: \(bounds.width), \(bounds.height)")
         //        aScreen.view.frame = CGRectMake(0, 0, bounds.width, bounds.height)
         view.addSubview(aScreen.view)
+        
+        // gesture stuff
+        panner = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
+        panner2 = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
+        aScreen.view.addGestureRecognizer(panner!)
+        keyboard.view.addGestureRecognizer(panner2!)
     }
     
     // add the formula field
@@ -129,17 +134,21 @@ class CalcViewController: UIViewController {
     
     // add values
     func addDigit(digit: Int) {
-        
-        if formulaField.text?.characters.count != 9 {
-            formulaField.text = "\(formulaField.text!)\(digit)" // adds the digit
-            // we don't actually need to store the operand until we are gonna compute stuff. 
-//            operand = Int((formulaField.text! as NSString).intValue) // stores the float value
+     
+        if aScreen.formulaField.text?.characters.count != 9 {
+            aScreen.formulaField.text = "\(formulaField.text!)\(digit)" // adds the digit
         }
+        
+//        if formulaField.text?.characters.count != 9 {
+//            formulaField.text = "\(formulaField.text!)\(digit)" // adds the digit
+//            // we don't actually need to store the operand until we are gonna compute stuff. 
+////            operand = Int((formulaField.text! as NSString).intValue) // stores the float value
+//        }
     }
     
     func replaceDigits(digit: Int) {
-        formulaField.text = "\(digit)" // adds the digit
-        
+//        formulaField.text = "\(digit)" // adds the digit
+        aScreen.formulaField.text = "\(digit)" // adds the digit
         // we don't actually need to store the operand until we are gonna compute stuff.
 //        operand = Int((formulaField.text! as NSString).intValue) // stores the float value
         
@@ -151,7 +160,8 @@ class CalcViewController: UIViewController {
         activeOperator = operation
         storedoperand = operand
         operand = 0
-        formulaField.text = "0"
+//        formulaField.text = "0"
+        aScreen.formulaField.text = "0"
     }
     
     func resolveEquation() {
@@ -172,30 +182,34 @@ class CalcViewController: UIViewController {
     
     // Actions
     func backspace() {
-        var theText = formulaField.text!
+//        var theText = formulaField.text!
+        var theText = aScreen.formulaField.text!
         if theText.characters.count > 0 {
             theText = theText.substringToIndex(theText.startIndex.advancedBy(theText.characters.count - 1))
-            formulaField.text = theText
-            operand = Int((formulaField.text! as NSString).intValue) // stores the Int value
+//            formulaField.text = theText
+            aScreen.formulaField.text = theText
+//            operand = Int((formulaField.text! as NSString).intValue) // stores the Int value
+            operand = Int((aScreen.formulaField.text! as NSString).intValue) // stores the Int value
 
         }
         
         if theText.characters.count < 1 {
-            formulaField.text = "0"
+//            formulaField.text = "0"
+            aScreen.formulaField.text = "0"
             operand = 0
         }
         
     }
     
     func clear() {
-        formulaField.text = "0"
+//        formulaField.text = "0"
+        aScreen.formulaField.text = "0"
         operand = 0
     }
     
     func reversePositivity() {
         
     }
-
     
     // perform the actual math
     func add() {
@@ -268,12 +282,29 @@ extension CalcViewController {
                     keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y + yDistance)
                     aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y + yDistance)
                 }
+            } else {
+                if(yDistance < 0) {
+                    keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y + yDistance)
+                    aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y + yDistance)
+                }
             }
             break
         case .Ended:
             if historyVisible == false {
-                if (xDistance > (bounds.width / 3)) || (yDistance > (bounds.height / 3)) || (xDistance < -(bounds.width / 3)) || (yDistance < -(bounds.height / 3)){
+                if  (xDistance > (bounds.width / 3))  ||
+                    (yDistance > (bounds.height / 3)) ||
+                    (xDistance < -(bounds.width / 3)) ||
+                    (yDistance < -(bounds.height / 3)) {
                     showHistory()
+                } else {
+                    resetViewPositionAndTransformations()
+                }
+            } else {
+                if  (xDistance > (bounds.width / 3))  ||
+                    (yDistance > (bounds.height / 3)) ||
+                    (xDistance < -(bounds.width / 3)) ||
+                    (yDistance < -(bounds.height / 3)) {
+                    showKeyboard()
                 } else {
                     resetViewPositionAndTransformations()
                 }
@@ -295,11 +326,21 @@ extension CalcViewController {
     }
     
     func showHistory() {
-        whereItShouldBePoint = originalPoint
+//        whereItShouldBePoint = originalPoint
         historyVisible = true
         UIView.animateWithDuration(0.2, animations: {
-            self.keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y + self.bounds.height + 20)
-            self.aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y + self.bounds.height + 20)
+            self.keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y + self.keyboard.view!.frame.height)
+            self.aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y + self.keyboard.view!.frame.height)
+        })
+        
+    }
+    
+    func showKeyboard() {
+        //        whereItShouldBePoint = originalPoint
+        historyVisible = false
+        UIView.animateWithDuration(0.2, animations: {
+            self.keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y - self.keyboard.view!.frame.height)
+            self.aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y - self.keyboard.view!.frame.height)
         })
         
     }

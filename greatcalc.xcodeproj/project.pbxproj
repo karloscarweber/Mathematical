@@ -70,9 +70,9 @@
 			children = (
 				937BDF371CC8313300CED950 /* AppDelegate.swift */,
 				93A208BA1CD0A0A600420ED2 /* CalcViewController.swift */,
-				93297A861CDDAA5500153D62 /* DiscretePanGestureRecognizer.swift */,
 				93A208BC1CD1306100420ED2 /* KeyboardViewController.swift */,
 				93297A881CDDB9CA00153D62 /* FormulaScreenViewController.swift */,
+				93297A861CDDAA5500153D62 /* DiscretePanGestureRecognizer.swift */,
 				93FBFF451CD282CD0015EABF /* Models.swift */,
 				93FBFF431CD1BFC70015EABF /* Enumerations.swift */,
 				9371EFF01CDEDF6100547CDA /* UIKitExtensions.swift */,
