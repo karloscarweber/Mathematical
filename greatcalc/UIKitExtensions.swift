@@ -1,6 +1,6 @@
 //
 //  UIKitExtensions.swift
-//  greatcalc
+//  Mathematical!
 //
 //  Created by Karl Weber on 5/7/16.
 //  Copyright © 2016 Prologue. All rights reserved.

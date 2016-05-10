@@ -1,6 +1,6 @@
 //
 //  KeyboardViewController.swift
-//  greatcalc
+//  Mathematical!
 //
 //  Created by Karl Weber on 4/27/16.
 //  Copyright © 2016 Prologue. All rights reserved.

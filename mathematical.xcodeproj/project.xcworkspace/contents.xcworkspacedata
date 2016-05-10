@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:greatcalc.xcodeproj">
+      location = "self:/Users/kow/Projects/greatcalc/mathematical.xcodeproj">
    </FileRef>
 </Workspace>

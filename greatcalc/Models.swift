@@ -1,6 +1,6 @@
 //
 //  Models.swift
-//  greatcalc
+//  Mathematical!
 //
 //  Created by Karl Weber on 4/28/16.
 //  Copyright © 2016 Prologue. All rights reserved.
@@ -8,21 +8,19 @@
 //  I know what your thinking! Why does a calculator need a model
 //  So that we can store equations of course
 //
-//
-
 
 import UIKit
 
-struct equation {
-    var operand1: Float = 0,
-        operation = CalcOperator.Addition,
-        operand2: Float = 0,
-        result: Float = 0,
-        saved: Bool = false,
-        active: Bool = false
-}
+//struct equation {
+//    var operand1: Float = 0,
+//        operation = CalcOperator.Addition,
+//        operand2: Float = 0,
+//        result: Float = 0,
+//        saved: Bool = false,
+//        active: Bool = false
+//}
 
-class savedEquation: NSObject, NSCoding {
+class Equation: NSObject, NSCoding {
     
     var operandleft: Float = 0,
     operandright: Float = 0,
@@ -51,6 +49,11 @@ class savedEquation: NSObject, NSCoding {
         self.result = result
         self.saved = saved
         self.active = active
+    }
+    
+    // convenience method
+    func displayText() -> String {
+        return "1 + 1 = 2"
     }
 
     // NSCoding stuff for saving files to disk
@@ -89,11 +92,3 @@ class savedEquation: NSObject, NSCoding {
     }
     
 }
-
-//enum CalcOperator {
-//    case Addition
-//    case Subtraction
-//    case Division
-//    case Multiplication
-//    case Equality
-//}

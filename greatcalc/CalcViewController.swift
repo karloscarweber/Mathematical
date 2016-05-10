@@ -1,6 +1,6 @@
 //
 //  CalcViewController.swift
-//  greatcalc
+//  Mathematical!
 //
 //  Created by Karl Weber on 4/27/16.
 //  Copyright © 2016 Prologue. All rights reserved.
@@ -19,12 +19,17 @@ class CalcViewController: UIViewController {
     var screenOriginalPoint = CGPointZero // used for animations
     var screenWhereItShouldBePoint = CGPointZero // used for animating it back to where it should be
     
-    // interface components
+    // keyboard components
     let keyboard = KeyboardViewController()
     var originalPoint = CGPointZero // used for animations
     var whereItShouldBePoint = CGPointZero // used for animating it back to where it should be
     var maximumTravel: CGFloat = 0 // the maximum distance the views can travel downward.
     let formulaField = UILabel()
+    
+    // historyViewComponents
+    let historyView = HistoryViewController()
+    var historyOriginalPoint = CGPointZero // used for animations
+    
     
     // State management:
     var historyVisible = false
@@ -55,6 +60,8 @@ class CalcViewController: UIViewController {
 
         setupGradientThingy()
         
+        setupHistoryView()
+        
         // layout keyboard view on initial load thing
         layoutKeyboard()
         layoutFormulaField()
@@ -74,6 +81,12 @@ class CalcViewController: UIViewController {
         gradientBackgroundThingy.removeFromSuperview()
         gradientBackgroundThingy.frame = CGRectMake(0, 0, bounds.width, bounds.height)
         view.addSubview(gradientBackgroundThingy)
+    }
+    
+    func setupHistoryView() {
+        historyView.view.removeFromSuperview()
+        addChildViewController(historyView)
+        view.addSubview(historyView.view)
     }
     
     // add the formula field
@@ -269,6 +282,7 @@ extension CalcViewController {
         case .Began:
             self.originalPoint = keyboard.view!.center
             self.screenOriginalPoint = aScreen.view!.center
+            self.historyOriginalPoint = historyView.view!.center
             break
         case .Changed:
             print("x: \(xDistance), y: \(yDistance)")
@@ -277,11 +291,13 @@ extension CalcViewController {
                 if(yDistance > 0) {
                     keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y + yDistance)
                     aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y + yDistance)
+                    historyView.view!.center = CGPointMake(self.historyOriginalPoint.x, self.historyOriginalPoint.y + yDistance)
                 }
             } else {
                 if(yDistance < 0) {
                     keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y + yDistance)
                     aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y + yDistance)
+                    historyView.view!.center = CGPointMake(self.historyOriginalPoint.x, self.historyOriginalPoint.y + yDistance)
                 }
             }
             break
@@ -316,7 +332,7 @@ extension CalcViewController {
         UIView.animateWithDuration(0.2, animations: {
             self.keyboard.view!.center = self.originalPoint
             self.aScreen.view!.center = self.screenOriginalPoint
-//            self.keyboard.view!.transform = CGAffineTransformMakeRotation(0)
+            self.historyView.view!.center = self.historyOriginalPoint
         })
         
     }
@@ -327,6 +343,7 @@ extension CalcViewController {
         UIView.animateWithDuration(0.2, animations: {
             self.keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y + self.keyboard.view!.frame.height)
             self.aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y + self.maximumTravel)
+            self.historyView.view!.center = CGPointMake(self.historyOriginalPoint.x, self.historyOriginalPoint.y + self.maximumTravel)
         })
         
     }
@@ -337,6 +354,7 @@ extension CalcViewController {
         UIView.animateWithDuration(0.2, animations: {
             self.keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y - self.keyboard.view!.frame.height)
             self.aScreen.view!.center = CGPointMake(self.screenOriginalPoint.x, self.screenOriginalPoint.y - self.maximumTravel)
+            self.historyView.view!.center = CGPointMake(self.historyOriginalPoint.x, self.historyOriginalPoint.y - self.maximumTravel)
         })
         
     }

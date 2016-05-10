@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  greatcalc
+//  Mathematical!
 //
 //  Created by Karl Weber on 4/20/16.
 //  Copyright © 2016 Prologue. All rights reserved.
