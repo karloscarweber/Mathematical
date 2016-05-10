@@ -35,8 +35,3 @@ enum CalcActions {
     case Clear
     case Backspace
 }
-
-enum ValueMode {
-    case Replace
-    case Append
-}

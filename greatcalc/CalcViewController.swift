@@ -24,7 +24,6 @@ class CalcViewController: UIViewController {
     var originalPoint = CGPointZero // used for animations
     var whereItShouldBePoint = CGPointZero // used for animating it back to where it should be
     var maximumTravel: CGFloat = 0 // the maximum distance the views can travel downward.
-    let formulaField = UILabel()
     
     // historyViewComponents
     let historyView = HistoryViewController()
@@ -35,11 +34,10 @@ class CalcViewController: UIViewController {
     var historyVisible = false
     
     // values
-    var operand: Int = 0 // the current operand that is being manipulated
+    var operand: Float = 0 // the current operand that is being manipulated
     var poerandPositivity: Positivity = .Positive
-    var storedoperand: Int = 0 // the left hand side of the operator
+    var storedoperand: Float = 0 // the left hand side of the operator
     var activeOperator = CalcOperator.Equality // Equality is the default because it does nothing unless tapped.
-    var currentValueMode: ValueMode = .Append
     
     var panner: DiscretePanGestureRecognizer?
     var panner2: DiscretePanGestureRecognizer?
@@ -64,7 +62,6 @@ class CalcViewController: UIViewController {
         
         // layout keyboard view on initial load thing
         layoutKeyboard()
-        layoutFormulaField()
         
         // layout screen View.
         addChildViewController(aScreen)
@@ -89,16 +86,6 @@ class CalcViewController: UIViewController {
         view.addSubview(historyView.view)
     }
     
-    // add the formula field
-    func layoutFormulaField() {
-        formulaField.frame = CGRectMake(margin, keyboard.view.frame.origin.y - 90.0, keyboard.view.frame.width - margin - margin, 90.0)
-        formulaField.text = ""
-        addDigit(0)
-        formulaField.font = UIFont.systemFontOfSize(80, weight: 0.05)
-        formulaField.textAlignment = .Right
-        formulaField.textColor = .blueColor()
-        view.addSubview(formulaField)
-    }
     
     func layoutKeyboard() {
         addChildViewController(keyboard)
@@ -107,15 +94,57 @@ class CalcViewController: UIViewController {
         maximumTravel = keyboard.view.frame.height
     }
     
-    func sendInput(input: Int) {
+    // digital input
+    func sendInput(input: String) {
         
-        if currentValueMode == ValueMode.Append {
-            // if we haven't just pressed the equals sign then add a digit
-            addDigit(input)
-        } else {
-            // else replace the current number with the numbers you type in.
-            replaceDigits(input)
+        // we're not at our limit we can add input
+        if aScreen.digitField.text?.characters.count != 9 {
+            if aScreen.digitField.text != "0" {
+                // check for dots
+                if (input == ".") && (aScreen.digitField.text?.rangeOfString(".") != nil) {
+                    aScreen.digitField.text = "\(aScreen.digitField.text!)" // adds the digit
+                } else {
+                    aScreen.digitField.text = "\(aScreen.digitField.text!)\(input)" // adds the digit
+                }
+            } else {
+                aScreen.digitField.text = "\(input)" // adds the digit
+            }
         }
+    }
+    
+    // Actions!
+    func sendAction(action: CalcActions) {
+        
+        switch action {
+        case .Backspace:
+            backspace()
+        case .Clear:
+            clear()
+        case .PositiveNegative:
+            reversePositivity()
+        }
+        
+    }
+    
+    func backspace() {
+        
+        var theText = aScreen.digitField.text!
+        if theText.characters.count > 0 {
+            theText = theText.substringToIndex(theText.startIndex.advancedBy(theText.characters.count - 1))
+            aScreen.digitField.text = theText
+        }
+        
+        if theText.characters.count < 1 {
+            aScreen.digitField.text = "0"
+        }
+        
+    }
+    
+    func clear() {
+        aScreen.digitField.text = "0"
+    }
+    
+    func reversePositivity() {
         
     }
     
@@ -132,49 +161,12 @@ class CalcViewController: UIViewController {
         
     }
     
-    func sendAction(action: CalcActions) {
-        
-        switch action {
-        case .Backspace:
-            backspace()
-        case .Clear:
-            clear()
-        case .PositiveNegative:
-            reversePositivity()
-        }
-        
-    }
-    
-    // add values
-    func addDigit(digit: Int) {
-     
-        if aScreen.formulaField.text?.characters.count != 9 {
-            aScreen.formulaField.text = "\(formulaField.text!)\(digit)" // adds the digit
-        }
-        
-//        if formulaField.text?.characters.count != 9 {
-//            formulaField.text = "\(formulaField.text!)\(digit)" // adds the digit
-//            // we don't actually need to store the operand until we are gonna compute stuff. 
-////            operand = Int((formulaField.text! as NSString).intValue) // stores the float value
-//        }
-    }
-    
-    func replaceDigits(digit: Int) {
-//        formulaField.text = "\(digit)" // adds the digit
-        aScreen.formulaField.text = "\(digit)" // adds the digit
-        // we don't actually need to store the operand until we are gonna compute stuff.
-//        operand = Int((formulaField.text! as NSString).intValue) // stores the float value
-        
-        currentValueMode = .Append
-    }
-    
     // this happens when we type an operator, it replaces the active
     func replaceOperator(operation: CalcOperator) {
         activeOperator = operation
         storedoperand = operand
         operand = 0
-//        formulaField.text = "0"
-        aScreen.formulaField.text = "0"
+        aScreen.digitField.text = "0"
     }
     
     func resolveEquation() {
@@ -193,62 +185,31 @@ class CalcViewController: UIViewController {
         }
     }
     
-    // Actions
-    func backspace() {
-//        var theText = formulaField.text!
-        var theText = aScreen.formulaField.text!
-        if theText.characters.count > 0 {
-            theText = theText.substringToIndex(theText.startIndex.advancedBy(theText.characters.count - 1))
-//            formulaField.text = theText
-            aScreen.formulaField.text = theText
-//            operand = Int((formulaField.text! as NSString).intValue) // stores the Int value
-            operand = Int((aScreen.formulaField.text! as NSString).intValue) // stores the Int value
-
-        }
-        
-        if theText.characters.count < 1 {
-//            formulaField.text = "0"
-            aScreen.formulaField.text = "0"
-            operand = 0
-        }
-        
-    }
-    
-    func clear() {
-//        formulaField.text = "0"
-        aScreen.formulaField.text = "0"
-        operand = 0
-    }
-    
-    func reversePositivity() {
-        
-    }
-    
     // perform the actual math
     func add() {
         let result = storedoperand + operand
-        formulaField.text = "\(result)"
+        aScreen.digitField.text = "\(result)"
         operand = result
         storedoperand = 0
     }
     
     func subtract() {
         let result = storedoperand - operand
-        formulaField.text = "\(result)"
+        aScreen.digitField.text = "\(result)"
         operand = result
         storedoperand = 0
     }
     
     func divide() {
         let result = storedoperand / operand
-        formulaField.text = "\(result)"
+        aScreen.digitField.text = "\(result)"
         operand = result
         storedoperand = 0
     }
     
     func multiply() {
         let result = storedoperand * operand
-        formulaField.text = "\(result)"
+        aScreen.digitField.text = "\(result)"
         operand = result
         storedoperand = 0
     }

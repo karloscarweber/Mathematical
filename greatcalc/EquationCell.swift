@@ -10,12 +10,17 @@ import UIKit
 
 class EquationCell: UICollectionViewCell {
     
+    var indexPath: NSIndexPath?
+    
     var equation: Equation?
     var panner: DiscretePanGestureRecognizer?
     var pullDirection: swipePanningDirection = swipePanningDirection.Left
-    var deleteicon = UIView()
-    var saveicon = UIView()
-    var saved = UIView()
+    var deleteflag = UIView()
+    var deleteflagOriginalPoint = CGPointZero
+    var saveflag = UIView()
+    var reticle = UIView() // saved reticle
+    var reticleOriginalPoint = CGPointZero
+    var subreticle = UIView() // saved sub reticle
     var title = UILabel()
     var titleOriginalPoint = CGPointZero
     var delegate: EquationCellDelegate?
@@ -44,15 +49,40 @@ class EquationCell: UICollectionViewCell {
         title.textColor = .whiteColor()
         title.frame = CGRectMake(20, 15, (contentView.frame.width - 40.0), 18)
 //        title.text = equation?.displayText()
-        title.text = "999999999"
+        // delete this next line later
+        backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.15)
         contentView.addSubview(title)
         
-        setupReticle()
+        setupReticles()
     }
     
-    func setupReticle() {
+    func setupReticles() {
+        reticle.removeFromSuperview()
+        reticle.frame = CGRectMake(15, 19, 10, 10)
+        reticle.layer.borderColor = UIColor.mathDarkYellow().CGColor
+        reticle.layer.borderWidth = 1.0
+        reticle.layer.cornerRadius = 5.0
+        contentView.addSubview(reticle)
+        
+        subreticle.removeFromSuperview()
+        subreticle.frame = CGRectMake(2, 2, 6, 6)
+        subreticle.backgroundColor = UIColor.mathDarkYellow()
+        subreticle.layer.cornerRadius = 3.0
+        reticle.addSubview(subreticle)
+        
+        setupFlags()
+    }
     
+    func setupFlags() {
+        
+        let bounds = self.contentView.bounds
     
+        // start with save flag
+        deleteflag.removeFromSuperview()
+        deleteflag.frame = CGRectMake(bounds.width + 62, 0, 124, bounds.height)
+        deleteflag.backgroundColor = UIColor.mathDarkRed()
+        deleteflag.layer.cornerRadius = bounds.height / 2
+        contentView.addSubview(deleteflag)
     }
     
     
@@ -61,9 +91,12 @@ class EquationCell: UICollectionViewCell {
         self.equation = equation
         if equation.saved {
             backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.15)
+            reticle.layer.opacity = 1.0
         } else {
             backgroundColor = .clearColor()
+            reticle.layer.opacity = 0.0
         }
+        title.text = equation.displayText()
     }
     
     // restyles all the things.
@@ -74,8 +107,8 @@ class EquationCell: UICollectionViewCell {
 }
 
 protocol EquationCellDelegate {
-    func cellDidSwipeLeftAtIndex(atIndex indexPath: NSIndexPath)
-    func cellDidSwipeRighAtIndex(atIndex indexPath: NSIndexPath)
+    func cellDidPullLeftAtIndex(atIndex indexPath: NSIndexPath)
+    func cellDidPullRightAtIndex(atIndex indexPath: NSIndexPath)
 }
 
 extension EquationCell {
@@ -84,15 +117,14 @@ extension EquationCell {
     func dragged(gestureRecognizer: UIPanGestureRecognizer) {
         
         let xDistance = gestureRecognizer.translationInView(self.contentView).x
-        let yDistance = gestureRecognizer.translationInView(self.contentView).y
-//        let bounds = UIScreen.mainScreen().bounds
-        
         
         switch gestureRecognizer.state {
         case .Began:
 
             // save the original point of the thingys so that we can slowly animate.
             self.titleOriginalPoint = title.center
+            self.reticleOriginalPoint = reticle.center
+            self.deleteflagOriginalPoint = deleteflag.center
             
             // locks in the action to be either left or right, but not both.
             if xDistance > 0 {
@@ -103,25 +135,38 @@ extension EquationCell {
             
             break
         case .Changed:
-//            print("x: \(xDistance), y: \(yDistance)")
+
+            let reducedTranslation = (xDistance * 0.7)
+            let acceleratedTranslation = (xDistance * 1.4)
             
             if pullDirection == .Right {
-                if(xDistance > 0) {
-                    
-                    let reducedTranslation = (xDistance * 0.7)
-                    
+                if xDistance > 0  {
                     print("PUll Right")
                     title.center = CGPointMake(self.titleOriginalPoint.x + reducedTranslation, self.titleOriginalPoint.y)
+                    reticle.center = CGPointMake(self.reticleOriginalPoint.x + reducedTranslation, self.reticleOriginalPoint.y)
+                    deleteflag.center = CGPointMake(self.deleteflagOriginalPoint.x + acceleratedTranslation, self.deleteflagOriginalPoint.y)
                 }
+                
             } else {
-                if(xDistance < 0) {
-                    let reducedTranslation = (xDistance * 0.7)
+                if xDistance < 0 {
                     print("PUll Left")
                     title.center = CGPointMake(self.titleOriginalPoint.x + reducedTranslation, self.titleOriginalPoint.y)
+                    reticle.center = CGPointMake(self.reticleOriginalPoint.x + reducedTranslation, self.reticleOriginalPoint.y)
+                    deleteflag.center = CGPointMake(self.deleteflagOriginalPoint.x + acceleratedTranslation, self.deleteflagOriginalPoint.y)
+                    print("xDistance: \(xDistance)")
                 }
+                
+                if xDistance < -100 {
+                    // trigger the end
+                    gestureRecognizer.enabled = false
+                    print("disable the gesture recognizer")
+                    resetViewPositionAndTransformations()
+                }
+                
             }
             break
         case .Ended:
+            print("ended!")
             if pullDirection == .Right {
 //                if  (xDistance > (bounds.width / 3))  ||
 //                    (yDistance > (bounds.height / 3)) ||
@@ -152,10 +197,35 @@ extension EquationCell {
     func resetViewPositionAndTransformations() {
         UIView.animateWithDuration(0.2, animations: {
             self.title.center = self.titleOriginalPoint
+            self.reticle.center = self.reticleOriginalPoint
+            self.deleteflag.center = self.deleteflagOriginalPoint
+            self.panner?.enabled = true
         })
-        
     }
     
+    func deleteMe() {
+        UIView.animateWithDuration(0.2, animations: {
+            self.title.center = self.titleOriginalPoint
+            self.reticle.center = self.reticleOriginalPoint
+            self.deleteflag.center = self.deleteflagOriginalPoint
+            self.panner?.enabled = true
+        }, completion: { whatever in
+        
+        })
+    }
+    
+    func saveMe() {
+        UIView.animateWithDuration(0.2, animations: {
+            self.title.center = self.titleOriginalPoint
+            self.reticle.center = self.reticleOriginalPoint
+            self.deleteflag.center = self.deleteflagOriginalPoint
+            self.panner?.enabled = true
+        }, completion: { whatever in
+            if let ip = self.indexPath {
+                self.delegate?.cellDidPullRightAtIndex(atIndex: ip)
+            }
+        })
+    }
     
 }
 

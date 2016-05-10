@@ -53,7 +53,7 @@ class Equation: NSObject, NSCoding {
     
     // convenience method
     func displayText() -> String {
-        return "1 + 1 = 2"
+        return "\(operandleft.calcValue) \(operatorToString(operation)) \(operandright.calcValue) = \(result.calcValue)"
     }
 
     // NSCoding stuff for saving files to disk
@@ -78,7 +78,7 @@ class Equation: NSObject, NSCoding {
         switch operationstring {
         case "Addition":
             operation = CalcOperator.Addition
-        case "Subtaction":
+        case "Subtraction":
             operation = CalcOperator.Subtraction
         case "Multiplication":
             operation = CalcOperator.Multiplication
@@ -89,6 +89,22 @@ class Equation: NSObject, NSCoding {
             break
         }
         self.init(operandleft: operandleft, operandright: operandright, operation: operation, result: result, saved: saved, active: active)
+    }
+    
+    func operatorToString(op: CalcOperator) -> String {
+        switch op {
+        case .Addition:
+            return "+"
+        case .Subtraction:
+            return "-"
+        case .Multiplication:
+            return "x"
+        case .Division:
+            return "/"
+        default:
+            return "+"
+        }
+        
     }
     
 }

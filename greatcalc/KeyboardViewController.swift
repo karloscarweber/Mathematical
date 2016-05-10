@@ -256,7 +256,6 @@ class KeyboardViewController: UIViewController {
         button.setTitleColor(UIColor.mathGray(), forState: .Normal)
         button.tag = 17
         button.addTarget(self, action: #selector(valueTapped), forControlEvents: .TouchUpInside)
-        
         button.linescolor = .mathLightGray()
         view.addSubview(button)
         buttons[17] = button
@@ -298,37 +297,33 @@ class KeyboardViewController: UIViewController {
         return CGFloat(((buttonSize+margin) * row) + margin)
     }
     
-    func rectForPlace(place: CGFloat, row: CGFloat) -> CGRect {
-        if place == 0 {
-            
-        }
-        
-        return CGRectZero
-    }
-    
     func valueTapped(sender: UIButton, forEvent event: UIEvent) {
+        
+        print("valueTapped: \(sender.tag)")
         
         switch sender.tag {
         case 4:
-            (parentViewController as! CalcViewController).sendInput(7)
+            (parentViewController as! CalcViewController).sendInput("7")
         case 5:
-            (parentViewController as! CalcViewController).sendInput(8)
+            (parentViewController as! CalcViewController).sendInput("8")
         case 6:
-            (parentViewController as! CalcViewController).sendInput(9)
+            (parentViewController as! CalcViewController).sendInput("9")
         case 8:
-            (parentViewController as! CalcViewController).sendInput(4)
+            (parentViewController as! CalcViewController).sendInput("4")
         case 9:
-            (parentViewController as! CalcViewController).sendInput(5)
+            (parentViewController as! CalcViewController).sendInput("5")
         case 10:
-            (parentViewController as! CalcViewController).sendInput(6)
+            (parentViewController as! CalcViewController).sendInput("6")
         case 12:
-            (parentViewController as! CalcViewController).sendInput(1)
+            (parentViewController as! CalcViewController).sendInput("1")
         case 13:
-            (parentViewController as! CalcViewController).sendInput(2)
+            (parentViewController as! CalcViewController).sendInput("2")
         case 14:
-            (parentViewController as! CalcViewController).sendInput(3)
+            (parentViewController as! CalcViewController).sendInput("3")
         case 16:
-            (parentViewController as! CalcViewController).sendInput(0)
+            (parentViewController as! CalcViewController).sendInput("0")
+        case 17:
+            (parentViewController as! CalcViewController).sendInput(".")
         default:
             break
         }
@@ -336,6 +331,8 @@ class KeyboardViewController: UIViewController {
     }
     
     func operatorTapped(sender: UIButton, forEvent event: UIEvent) {
+        
+        print("operatorTapped: \(sender.tag)")
         switch sender.tag {
         case 3:
             (parentViewController as! CalcViewController).sendOperation(CalcOperator.Division)
@@ -351,6 +348,8 @@ class KeyboardViewController: UIViewController {
     }
     
     func actionTapped(sender: UIButton, forEvent event: UIEvent) {
+        
+        print("actionTapped: \(sender.tag)")
         
         switch sender.tag {
         case 0:

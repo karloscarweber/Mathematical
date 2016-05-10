@@ -40,9 +40,6 @@ class HistoryViewController: UIViewController {
         spaceBetween = (bounds.height - (buttonSize*5))
         view.frame = CGRectMake(0, -(bounds.height - spaceBetween), bounds.width, bounds.height - spaceBetween)
         view.backgroundColor = .clearColor()
-        if let savedEquations = loadHistory() {
-            equations = savedEquations
-        }
         setupTitleLabel()
     }
     
@@ -109,16 +106,5 @@ class HistoryViewController: UIViewController {
     func useEquationAtIndex(index: NSIndexPath) {
         
     }
-    
-    // NSCoding stuff
-    // we're gonna manage the history together here becuase it makes sense.
-    func saveHistory() {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(equations, toFile: Equation.ArchiveURL.path!)
-    }
-    
-    func loadHistory() -> [Equation]? {
-        return NSKeyedUnarchiver.unarchiveObjectWithFile(Equation.ArchiveURL.path!) as? [Equation]
-    }
-    
 
 }

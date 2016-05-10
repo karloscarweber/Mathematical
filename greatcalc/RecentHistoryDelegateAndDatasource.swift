@@ -10,11 +10,33 @@ import UIKit
 
 class RecentHistoryDelegateAndDatasource: NSObject, UICollectionViewDelegate, UICollectionViewDataSource  {
     
-    var equationStorage: HistoryViewController?
+    var equations = [Equation]()
+    
+//    var equationStorage: HistoryViewController?
     let equationCell = "EquationCell"
     
-    // MARK: Delegate
     
+    override init() {
+        super.init()
+        
+        if let savedEquations = loadHistory() {
+            equations = savedEquations
+        }
+        let sampleEquation = Equation(operandleft: 2, operandright: 2, operation: CalcOperator.Addition, result: 4.0, saved: false, active: false)
+        equations.append(sampleEquation)
+    }
+    
+    // NSCoding stuff
+    // we're gonna manage the history together here becuase it makes sense.
+    func saveHistory() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(equations, toFile: Equation.ArchiveURL.path!)
+    }
+    
+    func loadHistory() -> [Equation]? {
+        return NSKeyedUnarchiver.unarchiveObjectWithFile(Equation.ArchiveURL.path!) as? [Equation]
+    }
+    
+    // MARK: Delegate
     
     // MARK: Datasource
     
@@ -23,16 +45,13 @@ class RecentHistoryDelegateAndDatasource: NSObject, UICollectionViewDelegate, UI
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return equations.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(equationCell, forIndexPath: indexPath) as! EquationCell
-        if let storage = equationStorage {
-            cell.changeEquation(storage.equations[indexPath.row])
-        }
-        
+        cell.changeEquation(equations[indexPath.row])
         return cell
     }
     
@@ -44,17 +63,15 @@ class RecentHistoryDelegateAndDatasource: NSObject, UICollectionViewDelegate, UI
 
 extension RecentHistoryDelegateAndDatasource: EquationCellDelegate {
 
-    
-    func cellDidSwipeLeftAtIndex(atIndex indexPath: NSIndexPath) {
-        
+    // delete her
+    func cellDidPullLeftAtIndex(atIndex indexPath: NSIndexPath) {
+
     }
     
-    
-    func cellDidSwipeRighAtIndex(atIndex indexPath: NSIndexPath) {
-    
+    // save him!
+    func cellDidPullRightAtIndex(atIndex indexPath: NSIndexPath) {
+
     }
-    
     
 }
-
 

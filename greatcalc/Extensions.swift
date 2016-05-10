@@ -8,6 +8,14 @@
 
 import UIKit
 
+extension Float {
+    var calcValue: String {
+        if self - Float(Int(self)) == 0 {
+            return "\(Int(self))"
+        }
+        return "\(self)"
+    }
+}
 
 extension UIColor {
 
@@ -40,9 +48,13 @@ extension UIColor {
     class func mathDarkYellow() -> UIColor {
         return UIColor(red: 255/255, green: 174/255, blue: 0/255, alpha: 1.0)
     }
+    
+    // #D34333
+    class func mathDarkRed() -> UIColor {
+        return UIColor(red: 211/255, green: 67/255, blue: 51/255, alpha: 1.0)
+    }
 
 }
-
 
 class GradientView: UIView {
     
