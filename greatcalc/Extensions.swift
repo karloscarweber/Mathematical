@@ -9,11 +9,17 @@
 import UIKit
 
 extension Float {
-    var calcValue: String {
+    var stringValue: String {
         if self - Float(Int(self)) == 0 {
             return "\(Int(self))"
         }
         return "\(self)"
+    }
+}
+
+extension String {
+    var floatValue: Float {
+        return (self as NSString).floatValue
     }
 }
 

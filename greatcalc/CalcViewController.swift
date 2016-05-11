@@ -17,42 +17,44 @@ class CalcViewController: UIViewController {
     // View Screen components
     let aScreen = FormulaScreenViewController()
     var screenOriginalPoint = CGPointZero // used for animations
-    var screenWhereItShouldBePoint = CGPointZero // used for animating it back to where it should be
     
     // keyboard components
     let keyboard = KeyboardViewController()
     var originalPoint = CGPointZero // used for animations
-    var whereItShouldBePoint = CGPointZero // used for animating it back to where it should be
     var maximumTravel: CGFloat = 0 // the maximum distance the views can travel downward.
     
     // historyViewComponents
     let historyView = HistoryViewController()
     var historyOriginalPoint = CGPointZero // used for animations
     
-    
     // State management:
     var historyVisible = false
     
     // values
     var operand: Float = 0 // the current operand that is being manipulated
-    var poerandPositivity: Positivity = .Positive
+    var opoerandPositivity: Positivity = .Positive
     var storedoperand: Float = 0 // the left hand side of the operator
-    var activeOperator = CalcOperator.Equality // Equality is the default because it does nothing unless tapped.
     
+    
+    // equation sequences
+    /*
+     The idea is that we push operations and operands and results in order
+     so any input would set the digits, and any operation would create a result.
+     We can branch predict what to do based on past results.
+     much more predictable.
+     */
+    // new values
+    var operandleft: Float = 0 // the current operand that is being manipulated
+    var activeOperator = CalcOperator.Equality // Equality is the default because it does nothing unless tapped.
+    var operandright: Float = 0 // the current operand that is being manipulated
+    var lastEquation = Equation.blank() // where we're gonna get the result
+    
+    // panning stuff
     var panner: DiscretePanGestureRecognizer?
     var panner2: DiscretePanGestureRecognizer?
     let gradientBackgroundThingy = GradientView(colorOne: UIColor.mathLightBlack(), colorTwo: UIColor.mathDarkBlack())
-
     
-    // states
-    
-    // no input -> adding input // zero is always the assumed input
-    // tapped an operator -> stores the operand into storedoperand // stores the input as operand1 and the operator as the operator
-    // tap equal -> replace the operand with the result of the equation and then clear the equation.
-    
-    
-    // configure views again if you need to
-    // like if you load from a Nib.
+    // configure views
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -86,7 +88,6 @@ class CalcViewController: UIViewController {
         view.addSubview(historyView.view)
     }
     
-    
     func layoutKeyboard() {
         addChildViewController(keyboard)
         view.addSubview(keyboard.view)
@@ -109,6 +110,8 @@ class CalcViewController: UIViewController {
             } else {
                 aScreen.digitField.text = "\(input)" // adds the digit
             }
+            
+            operandright = (aScreen.digitField.text?.floatValue)!
         }
     }
     
@@ -137,89 +140,115 @@ class CalcViewController: UIViewController {
         if theText.characters.count < 1 {
             aScreen.digitField.text = "0"
         }
+        operandright = (aScreen.digitField.text?.floatValue)!
         
     }
     
     func clear() {
+        
+        lastEquation = Equation.blank() // blankedyblank
+        // reset fields
         aScreen.digitField.text = "0"
+        aScreen.formulaField.text = lastEquation.displayText()
     }
     
     func reversePositivity() {
         
     }
-    
+
+    // receive operations here
     func sendOperation(operation: CalcOperator) {
         
-        print("sendOperation was received: \(operation)")
-        switch operation {
-        case .Equality:
-            resolveEquation()
-        default:
-            replaceOperator(operation)
-            break
+        if lastEquation.result != nil {
+            // we had a complete equation last time
+            // we'll probably do math
+        
+            // we have digits
+            if ( (aScreen.digitField.text?.floatValue) != 0 ) {
+                // the last operation is complete and we have new input
+                // this is great, it means that we get to do math right off the bat
+                
+                if  operation != .Equality {
+                    lastEquation = Equation.blank()
+                    lastEquation.operandleft = (aScreen.digitField.text?.floatValue)
+                    lastEquation.operation = operation
+                }
+        
+            } else {
+                
+                // it's equality, so it repeats the last equation thing on the result
+                if  operation == .Equality {
+                    lastEquation.operandleft  = lastEquation.result!
+                    
+                // if it's anything other than an equality
+                } else {
+                    lastEquation.operandleft  = lastEquation.result!
+                    lastEquation.operandright = nil
+                    lastEquation.operation = operation
+                }
+                
+            }
+            changeVisibleNumbersBecauseOfOperations()
+            
+        } else {
+            // the last equation was incomplete we've got to sort things out
+            
+            // it's all blank back there
+            // fresh equation
+            if  lastEquation.operandleft == nil &&
+                lastEquation.operandright == nil &&
+                lastEquation.result == nil &&
+                ( (aScreen.digitField.text?.floatValue) != 0 ) {
+                
+                lastEquation.operandleft = (aScreen.digitField.text?.floatValue)!
+                lastEquation.operation = operation
+                changeVisibleNumbersBecauseOfOperations()
+                return
+            }
+            
+            
+            if lastEquation.operandleft != nil && operation != .Equality && ( (aScreen.digitField.text?.floatValue) != 0 ) {
+                
+                // we know that operandright is nil so we can get a result
+                // and then set it to nil again
+                lastEquation.operandright = (aScreen.digitField.text?.floatValue)
+                lastEquation.operandleft  = lastEquation.result!
+                lastEquation.operandright = nil
+                lastEquation.operation = operation
+                changeVisibleNumbersBecauseOfOperations()
+                return
+            }
+            
+            // if we tap any operation and we have valid input
+            if  lastEquation.operandleft != nil &&
+                ( (aScreen.digitField.text?.floatValue) != 0 ) {
+                
+                // complete the equation
+                lastEquation.operandright = (aScreen.digitField.text?.floatValue)
+                changeVisibleNumbersBecauseOfOperations()
+                return
+            }
+            
+            // Change the operation
+            if ((aScreen.digitField.text?.floatValue)! == 0) &&
+               operation != .Equality {
+                
+                // but we are setting the operation
+                lastEquation.operation = operation
+                aScreen.formulaField.text = lastEquation.displayText()
+                changeVisibleNumbersBecauseOfOperations()
+                return
+            }
+        
         }
         
     }
-    
-    // this happens when we type an operator, it replaces the active
-    func replaceOperator(operation: CalcOperator) {
-        activeOperator = operation
-        storedoperand = operand
-        operand = 0
+
+    func changeVisibleNumbersBecauseOfOperations() {
         aScreen.digitField.text = "0"
+        aScreen.formulaField.text = lastEquation.displayText()
     }
-    
-    func resolveEquation() {
-        
-        switch activeOperator {
-        case .Addition:
-            add()
-        case .Subtraction:
-            subtract()
-        case .Multiplication:
-            multiply()
-        case .Division:
-            divide()
-        default:
-            break
-        }
-    }
-    
-    // perform the actual math
-    func add() {
-        let result = storedoperand + operand
-        aScreen.digitField.text = "\(result)"
-        operand = result
-        storedoperand = 0
-    }
-    
-    func subtract() {
-        let result = storedoperand - operand
-        aScreen.digitField.text = "\(result)"
-        operand = result
-        storedoperand = 0
-    }
-    
-    func divide() {
-        let result = storedoperand / operand
-        aScreen.digitField.text = "\(result)"
-        operand = result
-        storedoperand = 0
-    }
-    
-    func multiply() {
-        let result = storedoperand * operand
-        aScreen.digitField.text = "\(result)"
-        operand = result
-        storedoperand = 0
-    }
-    
-    // utility functions to facilitate behaviours
-    /*
-        All of the numbers are Floats, but a float is represented with a decimal
-        and we don't want decimals at the end if there isn't an actual decimal value
-     */
-    
+
 }
 
 enum Positivity {
@@ -299,7 +328,6 @@ extension CalcViewController {
     }
     
     func showHistory() {
-//        whereItShouldBePoint = originalPoint
         historyVisible = true
         UIView.animateWithDuration(0.2, animations: {
             self.keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y + self.keyboard.view!.frame.height)
@@ -310,7 +338,6 @@ extension CalcViewController {
     }
     
     func showKeyboard() {
-        //        whereItShouldBePoint = originalPoint
         historyVisible = false
         UIView.animateWithDuration(0.2, animations: {
             self.keyboard.view!.center = CGPointMake(self.originalPoint.x, self.originalPoint.y - self.keyboard.view!.frame.height)

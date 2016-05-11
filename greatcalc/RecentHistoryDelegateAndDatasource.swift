@@ -12,9 +12,7 @@ class RecentHistoryDelegateAndDatasource: NSObject, UICollectionViewDelegate, UI
     
     var equations = [Equation]()
     
-//    var equationStorage: HistoryViewController?
     let equationCell = "EquationCell"
-    
     
     override init() {
         super.init()
@@ -22,14 +20,18 @@ class RecentHistoryDelegateAndDatasource: NSObject, UICollectionViewDelegate, UI
         if let savedEquations = loadHistory() {
             equations = savedEquations
         }
-        let sampleEquation = Equation(operandleft: 2, operandright: 2, operation: CalcOperator.Addition, result: 4.0, saved: false, active: false)
+        var sampleEquation = Equation(operandleft: 2, operandright: 2, operation: CalcOperator.Addition, result: 4, saved: false, active: false)
+        equations.append(sampleEquation)
+        sampleEquation = Equation(operandleft: 3, operandright: 5, operation: CalcOperator.Addition, result: 8, saved: false, active: false)
         equations.append(sampleEquation)
     }
     
     // NSCoding stuff
-    // we're gonna manage the history together here becuase it makes sense.
+    // We're gonna manage the history together here becuase it makes sense.
+    // there is literally no other models in this whole app.
     func saveHistory() {
         let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(equations, toFile: Equation.ArchiveURL.path!)
+        // whatever ¯\_(ツ)_/¯
     }
     
     func loadHistory() -> [Equation]? {
@@ -39,7 +41,6 @@ class RecentHistoryDelegateAndDatasource: NSObject, UICollectionViewDelegate, UI
     // MARK: Delegate
     
     // MARK: Datasource
-    
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }

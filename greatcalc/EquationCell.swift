@@ -13,16 +13,27 @@ class EquationCell: UICollectionViewCell {
     var indexPath: NSIndexPath?
     
     var equation: Equation?
+    
+    // panner stuff
     var panner: DiscretePanGestureRecognizer?
     var pullDirection: swipePanningDirection = swipePanningDirection.Left
+    
+    // flags and their positions
     var deleteflag = UIView()
     var deleteflagOriginalPoint = CGPointZero
     var saveflag = UIView()
+    var saveflagOriginalPoint = CGPointZero
+    
+    // reticle badge
     var reticle = UIView() // saved reticle
     var reticleOriginalPoint = CGPointZero
     var subreticle = UIView() // saved sub reticle
+    
+    // te actual title
     var title = UILabel()
     var titleOriginalPoint = CGPointZero
+    
+    // delegate
     var delegate: EquationCellDelegate?
     
     override init(frame: CGRect) {
@@ -147,45 +158,31 @@ extension EquationCell {
                     deleteflag.center = CGPointMake(self.deleteflagOriginalPoint.x + acceleratedTranslation, self.deleteflagOriginalPoint.y)
                 }
                 
-            } else {
-                if xDistance < 0 {
-                    print("PUll Left")
-                    title.center = CGPointMake(self.titleOriginalPoint.x + reducedTranslation, self.titleOriginalPoint.y)
-                    reticle.center = CGPointMake(self.reticleOriginalPoint.x + reducedTranslation, self.reticleOriginalPoint.y)
-                    deleteflag.center = CGPointMake(self.deleteflagOriginalPoint.x + acceleratedTranslation, self.deleteflagOriginalPoint.y)
-                    print("xDistance: \(xDistance)")
-                }
-                
-                if xDistance < -100 {
+                if xDistance > 100 {
                     // trigger the end
                     gestureRecognizer.enabled = false
                     print("disable the gesture recognizer")
                     resetViewPositionAndTransformations()
                 }
                 
+            } else {
+                if xDistance < 0 {
+                    title.center = CGPointMake(self.titleOriginalPoint.x + reducedTranslation, self.titleOriginalPoint.y)
+                    reticle.center = CGPointMake(self.reticleOriginalPoint.x + reducedTranslation, self.reticleOriginalPoint.y)
+                    deleteflag.center = CGPointMake(self.deleteflagOriginalPoint.x + acceleratedTranslation, self.deleteflagOriginalPoint.y)
+                }
+                
+                if xDistance < -100 {
+                    // trigger the end
+                    gestureRecognizer.enabled = false
+                    deleteMe() // deletes the fellow
+                    resetViewPositionAndTransformations()
+                }
+                
             }
             break
         case .Ended:
-            print("ended!")
-            if pullDirection == .Right {
-//                if  (xDistance > (bounds.width / 3))  ||
-//                    (yDistance > (bounds.height / 3)) ||
-//                    (xDistance < -(bounds.width / 3)) ||
-//                    (yDistance < -(bounds.height / 3)) {
-////                    showHistory()
-//                } else {
-//                    resetViewPositionAndTransformations()
-//                }
-            } else {
-//                if  (xDistance > (bounds.width / 3))  ||
-//                    (yDistance > (bounds.height / 3)) ||
-//                    (xDistance < -(bounds.width / 3)) ||
-//                    (yDistance < -(bounds.height / 3)) {
-////                    showKeyboard()
-//                } else {
-//                    resetViewPositionAndTransformations()
-//                }
-            }
+            // because of the way this gesture recognizer works we're barely using this one.
             resetViewPositionAndTransformations()
             break
         default:
@@ -204,22 +201,20 @@ extension EquationCell {
     }
     
     func deleteMe() {
+        print("delete me")
         UIView.animateWithDuration(0.2, animations: {
-            self.title.center = self.titleOriginalPoint
-            self.reticle.center = self.reticleOriginalPoint
-            self.deleteflag.center = self.deleteflagOriginalPoint
-            self.panner?.enabled = true
+
         }, completion: { whatever in
-        
+            if let ip = self.indexPath {
+                self.delegate?.cellDidPullLeftAtIndex(atIndex: ip)
+            }
         })
     }
     
     func saveMe() {
+        print("save me")
         UIView.animateWithDuration(0.2, animations: {
-            self.title.center = self.titleOriginalPoint
-            self.reticle.center = self.reticleOriginalPoint
-            self.deleteflag.center = self.deleteflagOriginalPoint
-            self.panner?.enabled = true
+
         }, completion: { whatever in
             if let ip = self.indexPath {
                 self.delegate?.cellDidPullRightAtIndex(atIndex: ip)

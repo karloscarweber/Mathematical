@@ -37,7 +37,7 @@ class FormulaScreenViewController: UIViewController {
         digitField.removeFromSuperview()
         digitField.frame = CGRectMake(20.0, digitYOffset, bounds.width - (margin*2), 64.0)
         digitField.font = UIFont.systemFontOfSize(64)
-        digitField.text = "163"
+        digitField.text = "0"
         digitField.textColor = .whiteColor()
         digitField.textAlignment = .Right
         self.view.addSubview(digitField)
@@ -50,7 +50,7 @@ class FormulaScreenViewController: UIViewController {
         formulaField.frame = CGRectMake(20.0, formulaYOffset, bounds.width - (margin*2), 24.0)
         formulaField.font = UIFont.systemFontOfSize(24)
         formulaField.textColor = .whiteColor()
-        formulaField.text = "134 + 29"
+        formulaField.text = ""
         formulaField.textAlignment = .Right
         formulaField.layer.opacity = 0.3
         self.view.addSubview(formulaField)

@@ -22,13 +22,34 @@ import UIKit
 
 class Equation: NSObject, NSCoding {
     
-    var operandleft: Float = 0,
-    operandright: Float = 0,
+    var operandleft: Float?,
+    operandright: Float?,
     operation: CalcOperator = .Addition,
     operationstring = "Addition",
-    result: Float = 0,
     saved: Bool = false,
-    active: Bool = false
+    active: Bool = false,
+    complete: Bool = false
+    
+    var result: Float? {
+        
+        if operandleft != nil && operandright != nil {
+            switch operation {
+            case .Addition:
+                return operandleft! + operandright!
+            case .Subtraction:
+                return operandleft! - operandright!
+            case .Multiplication:
+                return operandleft! * operandright!
+            case .Division:
+                return operandleft! / operandright!
+            default:
+                break
+            }
+        }
+
+        return nil
+    }
+    
     
     struct PropertyKey {
         static let operandleftKey  = "operandleft"
@@ -42,26 +63,48 @@ class Equation: NSObject, NSCoding {
     static let DocumentsDirectory = NSFileManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first!
     static let ArchiveURL = DocumentsDirectory.URLByAppendingPathComponent("equations")
     
-    init(operandleft: Float, operandright: Float, operation: CalcOperator, result: Float, saved: Bool, active: Bool) {
+    class func blank() -> Equation {
+        return self.init(operandleft: nil, operandright: nil, operation: CalcOperator.Equality, result: nil, saved: false, active: false)
+    }
+    
+    required init(operandleft: Float?, operandright: Float?, operation: CalcOperator, result: Float?, saved: Bool, active: Bool) {
         self.operandleft = operandleft
         self.operandright = operandright
         self.operation = operation
-        self.result = result
+//        self.result = result
         self.saved = saved
         self.active = active
     }
     
     // convenience method
     func displayText() -> String {
-        return "\(operandleft.calcValue) \(operatorToString(operation)) \(operandright.calcValue) = \(result.calcValue)"
+        var text = ""
+        if let ol = operandleft {
+            text = "\(ol.stringValue)"
+        } else {
+            return ""
+        }
+        if operation == .Equality {
+            return text
+        } else {
+            text = text + " \(operatorToString(operation))"
+        }
+        if let or = operandright {
+            text = text + " \(or.stringValue)"
+        }
+        if let rr = result {
+         text = text + " = \(rr.stringValue)"
+        }
+        return text
     }
 
     // NSCoding stuff for saving files to disk
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeFloat(operandleft, forKey: PropertyKey.operandleftKey)
-        aCoder.encodeFloat(operandright, forKey: PropertyKey.operandrightKey)
+        // saved equations always have their operands and results.
+        aCoder.encodeFloat(operandleft!, forKey: PropertyKey.operandleftKey)
+        aCoder.encodeFloat(operandright!, forKey: PropertyKey.operandrightKey)
         aCoder.encodeObject(operationstring, forKey: PropertyKey.operationKey)
-        aCoder.encodeFloat(result, forKey: PropertyKey.resultKey)
+//        aCoder.encodeFloat(result!, forKey: PropertyKey.resultKey)
         aCoder.encodeBool(saved, forKey: PropertyKey.savedKey)
         aCoder.encodeBool(active, forKey: PropertyKey.activeKey)
     }

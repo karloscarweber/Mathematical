@@ -299,7 +299,7 @@ class KeyboardViewController: UIViewController {
     
     func valueTapped(sender: UIButton, forEvent event: UIEvent) {
         
-        print("valueTapped: \(sender.tag)")
+//        print("valueTapped: \(sender.tag)")
         
         switch sender.tag {
         case 4:
@@ -332,7 +332,7 @@ class KeyboardViewController: UIViewController {
     
     func operatorTapped(sender: UIButton, forEvent event: UIEvent) {
         
-        print("operatorTapped: \(sender.tag)")
+//        print("operatorTapped: \(sender.tag)")
         switch sender.tag {
         case 3:
             (parentViewController as! CalcViewController).sendOperation(CalcOperator.Division)
@@ -349,8 +349,7 @@ class KeyboardViewController: UIViewController {
     
     func actionTapped(sender: UIButton, forEvent event: UIEvent) {
         
-        print("actionTapped: \(sender.tag)")
-        
+//        print("actionTapped: \(sender.tag)")
         switch sender.tag {
         case 0:
             (parentViewController as! CalcViewController).sendAction(CalcActions.Backspace)
