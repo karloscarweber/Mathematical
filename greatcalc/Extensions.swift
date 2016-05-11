@@ -62,6 +62,39 @@ extension UIColor {
 
 }
 
+extension UIImage {
+
+    class func mathDivide() -> UIImage {
+        return UIImage(named: "Divide")!
+    }
+    
+    class func mathMultiply() -> UIImage {
+        return UIImage(named: "Subtract")!
+    }
+    
+    class func mathSubtract() -> UIImage {
+        return UIImage(named: "Subtract")!
+    }
+    
+    class func mathAddition() -> UIImage {
+        return UIImage(named: "Addition")!
+    }
+    
+    class func mathEquals() -> UIImage {
+        return UIImage(named: "Equals")!
+    }
+    
+    class func mathSaved() -> UIImage {
+        return UIImage(named: "Save")!
+    }
+    
+    class func mathCheck() -> UIImage {
+        return UIImage(named: "Check")!
+    }
+
+}
+
+
 class GradientView: UIView {
     
     var color1 = UIColor.mathLightBlack()
