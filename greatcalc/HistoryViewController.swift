@@ -70,6 +70,7 @@ class HistoryViewController: UIViewController {
     func setupHistory() {
         history.backgroundColor = .clearColor()
         history.delegate = historyDND
+        historyDND.parentCollectionView = history
         history.dataSource = historyDND
         history.registerClass(EquationCell.self, forCellWithReuseIdentifier: "EquationCell")
         let positionY = customTabber.view.frame.origin.y + customTabber.view.frame.height + margin

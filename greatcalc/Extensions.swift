@@ -59,35 +59,47 @@ extension UIColor {
     class func mathDarkRed() -> UIColor {
         return UIColor(red: 211/255, green: 67/255, blue: 51/255, alpha: 1.0)
     }
+    
+    // #92C55D
+    class func mathDarkGreen() -> UIColor {
+        return UIColor(red: 146/255, green: 197/255, blue: 93/255, alpha: 1.0)
+    }
 
 }
 
 extension UIImage {
 
+    // size: x:14, y: 14
     class func mathDivide() -> UIImage {
         return UIImage(named: "Divide")!
     }
     
+    // size: x:13.33, y: 13.33
     class func mathMultiply() -> UIImage {
-        return UIImage(named: "Subtract")!
+        return UIImage(named: "Multiply")!
     }
     
+    // size: x:14, y: 2
     class func mathSubtract() -> UIImage {
         return UIImage(named: "Subtract")!
     }
     
-    class func mathAddition() -> UIImage {
+    // size: x:14, y: 14
+    class func mathAdditionIcon() -> UIImage {
         return UIImage(named: "Addition")!
     }
     
+    // size: x:14, y: 8
     class func mathEquals() -> UIImage {
         return UIImage(named: "Equals")!
     }
     
+    // size: x:10, y: 10
     class func mathSaved() -> UIImage {
-        return UIImage(named: "Save")!
+        return UIImage(named: "Saved")!
     }
     
+    // size: x:14.04, y: 12.75
     class func mathCheck() -> UIImage {
         return UIImage(named: "Check")!
     }

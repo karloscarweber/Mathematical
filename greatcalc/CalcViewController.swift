@@ -70,10 +70,10 @@ class CalcViewController: UIViewController {
         view.addSubview(aScreen.view)
         
         // gesture stuff
-        panner = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
-        panner2 = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
-        aScreen.view.addGestureRecognizer(panner!)
-        keyboard.view.addGestureRecognizer(panner2!)
+//        panner = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
+//        panner2 = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
+//        aScreen.view.addGestureRecognizer(panner!)
+//        keyboard.view.addGestureRecognizer(panner2!)
     }
     
     func setupGradientThingy() {
@@ -178,10 +178,16 @@ class CalcViewController: UIViewController {
                 
                 // it's equality, so it repeats the last equation thing on the result
                 if  operation == .Equality {
+                    // MARK: lastEquation qualifies to be saved
+                    saveLastEquation(lastEquation)
+                    
                     lastEquation.operandleft  = lastEquation.result!
                     
                 // if it's anything other than an equality
                 } else {
+                    // MARK: lastEquation qualifies to be saved
+                    saveLastEquation(lastEquation)
+                    
                     lastEquation.operandleft  = lastEquation.result!
                     lastEquation.operandright = nil
                     lastEquation.operation = operation
@@ -212,6 +218,9 @@ class CalcViewController: UIViewController {
                 // we know that operandright is nil so we can get a result
                 // and then set it to nil again
                 lastEquation.operandright = (aScreen.digitField.text?.floatValue)
+                // MARK: lastEquation qualifies to be saved
+                saveLastEquation(lastEquation)
+                
                 lastEquation.operandleft  = lastEquation.result!
                 lastEquation.operandright = nil
                 lastEquation.operation = operation
@@ -225,6 +234,9 @@ class CalcViewController: UIViewController {
                 
                 // complete the equation
                 lastEquation.operandright = (aScreen.digitField.text?.floatValue)
+                // MARK: lastEquation qualifies to be saved
+                saveLastEquation(lastEquation)
+                
                 changeVisibleNumbersBecauseOfOperations()
                 return
             }
@@ -248,6 +260,11 @@ class CalcViewController: UIViewController {
         aScreen.digitField.text = "0"
         aScreen.formulaField.text = lastEquation.displayText()
     }
+    
+    func saveLastEquation(equation: Equation) {
+        let archivalEquation = equation
+        historyView.historyDND.appendNewEquation(archivalEquation)
+    }
 
 }
 
@@ -260,9 +277,6 @@ extension CalcViewController {
 
     // the panning thingy!
     func dragged(gestureRecognizer: UIPanGestureRecognizer) {
-        
-        print("panning!")
-        
         
         let xDistance = gestureRecognizer.translationInView(self.view).x
         let yDistance = gestureRecognizer.translationInView(self.view).y

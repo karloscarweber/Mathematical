@@ -36,6 +36,7 @@ class EquationCell: UICollectionViewCell {
     // delegate
     var delegate: EquationCellDelegate?
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -94,20 +95,44 @@ class EquationCell: UICollectionViewCell {
         deleteflag.backgroundColor = UIColor.mathDarkRed()
         deleteflag.layer.cornerRadius = bounds.height / 2
         contentView.addSubview(deleteflag)
+        
+        let deleteIcon = UIView()
+        deleteIcon.backgroundColor = .whiteColor()
+        deleteIcon.frame = CGRectMake(20, 17.335, 13.33, 13.33)
+        deleteIcon.maskView = UIImageView(image: UIImage.mathMultiply() )
+        deleteflag.addSubview(deleteIcon)
+        
+        saveflag.removeFromSuperview()
+        saveflag.frame = CGRectMake( 0 - 62 - 124, 0, 124, bounds.height)
+        saveflag.backgroundColor = UIColor.mathDarkGreen()
+        saveflag.layer.cornerRadius = bounds.height / 2
+        contentView.addSubview(saveflag)
+        
+        let saveIcon = UIView()
+        saveIcon.backgroundColor = .whiteColor()
+        saveIcon.frame = CGRectMake(saveflag.frame.width - 28, 17, 14, 14)
+        saveIcon.maskView = UIImageView(image: UIImage.mathCheck())
+        saveflag.addSubview(saveIcon)
     }
     
-    
     // sets the state and display of all of the stuff.
-    func changeEquation(equation: Equation) {
-        self.equation = equation
-        if equation.saved {
-            backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.15)
-            reticle.layer.opacity = 1.0
+    func changeEquation() {
+        print("changeEquation called")
+        UIView.animateWithDuration(0.2, animations: {
+            self.matchSavedState()
+        }, completion: { whatever in
+        })
+        title.text = equation!.displayText()
+    }
+    
+    func matchSavedState() {
+        if self.equation!.saved {
+            self.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.15)
+            self.reticle.layer.opacity = 1.0
         } else {
-            backgroundColor = .clearColor()
-            reticle.layer.opacity = 0.0
+            self.backgroundColor = .clearColor()
+            self.reticle.layer.opacity = 0.0
         }
-        title.text = equation.displayText()
     }
     
     // restyles all the things.
@@ -136,6 +161,7 @@ extension EquationCell {
             self.titleOriginalPoint = title.center
             self.reticleOriginalPoint = reticle.center
             self.deleteflagOriginalPoint = deleteflag.center
+            self.saveflagOriginalPoint = saveflag.center
             
             // locks in the action to be either left or right, but not both.
             if xDistance > 0 {
@@ -152,16 +178,28 @@ extension EquationCell {
             
             if pullDirection == .Right {
                 if xDistance > 0  {
-                    print("PUll Right")
+//                    print("PUll Right")
                     title.center = CGPointMake(self.titleOriginalPoint.x + reducedTranslation, self.titleOriginalPoint.y)
                     reticle.center = CGPointMake(self.reticleOriginalPoint.x + reducedTranslation, self.reticleOriginalPoint.y)
                     deleteflag.center = CGPointMake(self.deleteflagOriginalPoint.x + acceleratedTranslation, self.deleteflagOriginalPoint.y)
+                    saveflag.center = CGPointMake(self.saveflagOriginalPoint.x + acceleratedTranslation, self.saveflagOriginalPoint.y)
                 }
                 
                 if xDistance > 100 {
-                    // trigger the end
+                    
                     gestureRecognizer.enabled = false
-                    print("disable the gesture recognizer")
+                    
+                    // trigger the save / unsave
+                    let newEquation = self.equation!
+                    if newEquation.saved == true {
+                        newEquation.saved = false
+                        print("set to unsaved")
+                    } else {
+                        newEquation.saved = true
+                        print("set to saved")
+                    }
+                    changeEquation()
+                    saveMe()
                     resetViewPositionAndTransformations()
                 }
                 
@@ -170,11 +208,13 @@ extension EquationCell {
                     title.center = CGPointMake(self.titleOriginalPoint.x + reducedTranslation, self.titleOriginalPoint.y)
                     reticle.center = CGPointMake(self.reticleOriginalPoint.x + reducedTranslation, self.reticleOriginalPoint.y)
                     deleteflag.center = CGPointMake(self.deleteflagOriginalPoint.x + acceleratedTranslation, self.deleteflagOriginalPoint.y)
+                    saveflag.center = CGPointMake(self.saveflagOriginalPoint.x + acceleratedTranslation, self.saveflagOriginalPoint.y)
                 }
                 
                 if xDistance < -100 {
-                    // trigger the end
+                    // trigger the delete
                     gestureRecognizer.enabled = false
+                    
                     deleteMe() // deletes the fellow
                     resetViewPositionAndTransformations()
                 }
@@ -196,30 +236,25 @@ extension EquationCell {
             self.title.center = self.titleOriginalPoint
             self.reticle.center = self.reticleOriginalPoint
             self.deleteflag.center = self.deleteflagOriginalPoint
+            self.saveflag.center = self.saveflagOriginalPoint
+            
+        }, completion: { whatever in
             self.panner?.enabled = true
         })
     }
     
     func deleteMe() {
         print("delete me")
-        UIView.animateWithDuration(0.2, animations: {
-
-        }, completion: { whatever in
-            if let ip = self.indexPath {
-                self.delegate?.cellDidPullLeftAtIndex(atIndex: ip)
-            }
-        })
+        if let ip = self.indexPath {
+            self.delegate?.cellDidPullLeftAtIndex(atIndex: ip)
+        }
     }
     
     func saveMe() {
         print("save me")
-        UIView.animateWithDuration(0.2, animations: {
-
-        }, completion: { whatever in
-            if let ip = self.indexPath {
-                self.delegate?.cellDidPullRightAtIndex(atIndex: ip)
-            }
-        })
+        if let ip = self.indexPath {
+            self.delegate?.cellDidPullRightAtIndex(atIndex: ip)
+        }
     }
     
 }
