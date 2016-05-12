@@ -35,8 +35,9 @@ class KeyboardViewController: UIViewController {
         // button 0 <-
         let button0 = MathButton()
         button0.frame = CGRectMake(xforbutton(0), yforrow(0), buttonSize, buttonSize)
-        button0.setTitle("<-", forState: .Normal)
-        button0.setTitleColor(UIColor.mathGray(), forState: .Normal)
+//        button0.setTitle("<-", forState: .Normal)
+//        button0.setTitleColor(UIColor.mathGray(), forState: .Normal)
+        button0.setImage(UIImage(named: "Backspace")!, forState: .Normal)
         button0.tag = 0
         button0.addTarget(self, action: #selector(actionTapped), forControlEvents: .TouchUpInside)
         button0.bottomLine = true
@@ -63,8 +64,8 @@ class KeyboardViewController: UIViewController {
         // button 2 +/-
         button = MathButton()
         button.frame = CGRectMake(xforbutton(2), yforrow(0), buttonSize, buttonSize)
-        button.setTitle("+/-", forState: .Normal)
-        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+//        button.setTitle("+/-", forState: .Normal)
+//        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
         button.tag = 2
         button.addTarget(self, action: #selector(actionTapped), forControlEvents: .TouchUpInside)
         button.bottomLine = true
@@ -73,11 +74,22 @@ class KeyboardViewController: UIViewController {
         view.addSubview(button)
         buttons[2] = button
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         // button 3 / an operator
         button = MathButton()
         button.frame = CGRectMake(xforbutton(3), yforrow(0), buttonSize, buttonSize)
-        button.setTitle("/", forState: .Normal)
-        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+        button.setImage(UIImage(named: "Divide")!, forState: .Normal)
         button.tag = 3
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
         button.bottomLine = true
@@ -127,8 +139,9 @@ class KeyboardViewController: UIViewController {
         // button 7 X an operator
         button = MathButton()
         button.frame = CGRectMake(xforbutton(3), yforrow(1), buttonSize, buttonSize)
-        button.setTitle("X", forState: .Normal)
-        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+//        button.setTitle("X", forState: .Normal)
+//        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+        button.setImage(UIImage(named: "Multiply")!, forState: .Normal)
         button.tag = 7
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
         button.bottomLine = true
@@ -178,8 +191,9 @@ class KeyboardViewController: UIViewController {
         // button 11 - an operator
         button = MathButton()
         button.frame = CGRectMake(xforbutton(3), yforrow(2), buttonSize, buttonSize)
-        button.setTitle("-", forState: .Normal)
-        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+//        button.setTitle("-", forState: .Normal)
+//        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+        button.setImage(UIImage(named: "Subtract")!, forState: .Normal)
         button.tag = 11
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
         button.bottomLine = true
@@ -229,8 +243,9 @@ class KeyboardViewController: UIViewController {
         // button 15 + an operator
         button = MathButton()
         button.frame = CGRectMake(xforbutton(3), yforrow(3), buttonSize, buttonSize)
-        button.setTitle("+", forState: .Normal)
-        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+//        button.setTitle("+", forState: .Normal)
+//        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+        button.setImage(UIImage(named: "Addition")!, forState: .Normal)
         button.tag = 15
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
         button.linescolor = .mathLightGray()
@@ -263,8 +278,9 @@ class KeyboardViewController: UIViewController {
         // button 18 = an operator
         button = MathButton()
         button.frame = CGRectMake(xforbutton(3), yforrow(4), buttonSize, buttonSize)
-        button.setTitle("=", forState: .Normal)
-        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+//        button.setTitle("=", forState: .Normal)
+//        button.setTitleColor(UIColor.mathGray(), forState: .Normal)
+        button.setImage(UIImage(named: "Equals")!, forState: .Normal)
         button.tag = 18
         button.addTarget(self, action: #selector(operatorTapped), forControlEvents: .TouchUpInside)
         button.backgroundColor = .mathDarkYellow()

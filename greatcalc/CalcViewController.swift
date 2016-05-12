@@ -70,10 +70,10 @@ class CalcViewController: UIViewController {
         view.addSubview(aScreen.view)
         
         // gesture stuff
-        panner = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
-        panner2 = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
-        aScreen.view.addGestureRecognizer(panner!)
-        keyboard.view.addGestureRecognizer(panner2!)
+//        panner = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
+//        panner2 = DiscretePanGestureRecognizer(direction: .Vertical, target: self, action: #selector(dragged))
+//        aScreen.view.addGestureRecognizer(panner!)
+//        keyboard.view.addGestureRecognizer(panner2!)
     }
     
     func setupGradientThingy() {
