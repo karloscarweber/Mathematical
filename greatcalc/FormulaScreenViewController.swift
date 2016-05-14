@@ -33,10 +33,20 @@ class FormulaScreenViewController: UIViewController {
     }
     
     func setupDigitField() {
-        let digitYOffset = (bounds.height - (buttonSize*5) - margin - 64)
+        
         digitField.removeFromSuperview()
-        digitField.frame = CGRectMake(20.0, digitYOffset, bounds.width - (margin*2), 64.0)
-        digitField.font = UIFont.systemFontOfSize(64)
+        
+        // resize and replace for iphone 4s:
+        if bounds.height < 500 {
+            let digitYOffset = (bounds.height - (buttonSize*5) - 10 - 48)
+            digitField.frame = CGRectMake(20.0, digitYOffset, bounds.width - (margin*2), 48.0)
+            digitField.font = UIFont.systemFontOfSize(48)
+        } else {
+            let digitYOffset = (bounds.height - (buttonSize*5) - margin - 64)
+            digitField.frame = CGRectMake(20.0, digitYOffset, bounds.width - (margin*2), 64.0)
+            digitField.font = UIFont.systemFontOfSize(64)
+        }
+        
         digitField.text = "0"
         digitField.textColor = .whiteColor()
         digitField.textAlignment = .Right
@@ -54,6 +64,11 @@ class FormulaScreenViewController: UIViewController {
         formulaField.textAlignment = .Right
         formulaField.layer.opacity = 0.3
         self.view.addSubview(formulaField)
+        
+        // just hide this thing if we're on an iPhone 4S
+        if bounds.height < 500 {
+            formulaField.removeFromSuperview()
+        }
         setupLine()
     }
     
